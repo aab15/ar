@@ -1,0 +1,30 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract banking {
+    uint256 public balance;
+    address public accountHolder;
+
+    constructor() {
+        accountHolder = msg.sender;
+    }
+
+    function withdraw() public payable {
+        require(balance > 0, "LOW BALANCE");
+        require(accountHolder == msg.sender, "Not Your Account");
+        payable(msg.sender).transfer(balance);
+        balance = 0;
+    }
+
+    function deposit() public payable {
+        require(msg.value > 0, "LOW BALANCE");
+        require(accountHolder == msg.sender, "Not Your Account");
+        balance += msg.value;
+    }
+
+    function showBalance() public view returns (uint256) {
+        require(accountHolder == msg.sender, "Not Your Account");
+        return balance;
+    }
+}
+
